@@ -41,7 +41,7 @@ const StatsSection = ({ stats }) => {
   }, [stats]);
 
   return (
-    <section className="py-20 bg-slate-800/50">
+    <section id="stats" className="py-20 bg-slate-800/50">
       <div className="max-w-7xl mx-auto px-4">
         <AnimatedElement
           animation="stagger"

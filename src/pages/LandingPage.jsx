@@ -7,6 +7,7 @@ import ServicesSection from "../components/ServicesSection";
 import FleetSection from "../components/FleetSection";
 import ContactSection from "../components/ContactSection";
 import Footer from "../components/Footer";
+import ScrollToTop from "../components/ScrollToTop";
 // import "../LandingPage.css"; // Uncomment if you move custom CSS
 
 const stats = [
@@ -99,22 +100,9 @@ const fleet = [
 ];
 
 const DunesAviationLanding = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [scrollY, setScrollY] = useState(0);
-
-  React.useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
     <div className="min-h-screen bg-slate-900 text-white">
-      <Navigation
-        isMenuOpen={isMenuOpen}
-        setIsMenuOpen={setIsMenuOpen}
-        scrollY={scrollY}
-      />
+      <Navigation />
       <HeroSection />
       <StatsSection stats={stats} />
       <AboutSection />
@@ -122,6 +110,7 @@ const DunesAviationLanding = () => {
       <FleetSection fleet={fleet} />
       <ContactSection />
       <Footer />
+      <ScrollToTop />
     </div>
   );
 };
