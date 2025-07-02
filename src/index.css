@@ -471,3 +471,80 @@ html {
   );
   animation: shimmer 1.5s infinite;
 }
+
+@font-face {
+  font-family: "Outfit";
+  src: url("./assets/fonts/Outfit-Thin.ttf") format("truetype");
+  font-weight: 100;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Outfit";
+  src: url("./assets/fonts/Outfit-ExtraLight.ttf") format("truetype");
+  font-weight: 200;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Outfit";
+  src: url("./assets/fonts/Outfit-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Outfit";
+  src: url("./assets/fonts/Outfit-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Outfit";
+  src: url("./assets/fonts/Outfit-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Outfit";
+  src: url("./assets/fonts/Outfit-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Outfit";
+  src: url("./assets/fonts/Outfit-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Outfit";
+  src: url("./assets/fonts/Outfit-ExtraBold.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Outfit";
+  src: url("./assets/fonts/Outfit-Black.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Francy";
+  src: url("./assets/fonts/Francy.ttf") format("truetype"),
+    url("./assets/fonts/Francy.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Global font settings */
+body,
+p {
+  font-family: "Outfit", sans-serif;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Francy", serif;
+  letter-spacing: 0.05em; /* tracking-wide */
+}

@@ -14,8 +14,22 @@ const HeroSection = () => {
       id="home"
       className="relative h-screen flex items-center justify-center overflow-hidden"
     >
+      {/* Background Video */}
+      <video
+        className="absolute inset-0 w-full h-full object-cover z-0"
+        src="/video.mp4"
+        autoPlay
+        loop
+        muted
+        playsInline
+      />
+      {/* Semi-transparent Overlay for readability */}
+      <div
+        className="absolute inset-0 z-10"
+        style={{ background: "rgba(25, 25, 41, 0.6)" }}
+      ></div>
       {/* Enhanced Animated Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800">
+      <div className="absolute inset-0 z-20 pointer-events-none">
         <div className="absolute inset-0 opacity-20">
           <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500 rounded-full blur-3xl animate-pulse"></div>
           <div
@@ -29,41 +43,7 @@ const HeroSection = () => {
         </div>
       </div>
 
-      {/* Enhanced Floating Particles */}
-      <div className="absolute inset-0 overflow-hidden">
-        {[...Array(20)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 bg-blue-400 rounded-full opacity-40 animate-float"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 5}s`,
-              animationDuration: `${4 + Math.random() * 3}s`,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Flying Planes Animation */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(3)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute text-blue-400 animate-fly"
-            style={{
-              top: `${20 + i * 30}%`,
-              left: "-10%",
-              animationDelay: `${i * 2}s`,
-              animationDuration: "8s",
-            }}
-          >
-            <Plane className="w-8 h-8 transform rotate-45" />
-          </div>
-        ))}
-      </div>
-
-      <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
+      <div className="relative z-40 text-center max-w-4xl mx-auto px-4">
         <AnimatedElement animation="fadeInUp" delay={200}>
           <div className="mb-8">
             <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
@@ -79,7 +59,6 @@ const HeroSection = () => {
             </p>
           </div>
         </AnimatedElement>
-
         <AnimatedElement animation="fadeInUp" delay={400}>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <button
@@ -102,7 +81,6 @@ const HeroSection = () => {
             </button>
           </div>
         </AnimatedElement>
-
         <AnimatedElement animation="fadeInUp" delay={600}>
           <div className="animate-bounce">
             <ChevronDown className="w-8 h-8 text-blue-400 mx-auto animate-pulse" />
