@@ -1,6 +1,6 @@
 const Home = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-dunes-gradient">
       <div className="container mx-auto px-4 py-8">
         <header className="text-center mb-12 animate-fade-in">
           <h1 className="text-5xl font-bold text-gray-800 mb-4">

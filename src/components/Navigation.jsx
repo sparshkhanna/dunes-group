@@ -6,6 +6,7 @@ const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
   const [activeSection, setActiveSection] = useState("home");
+  const [isLogoHovered, setIsLogoHovered] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -73,13 +74,18 @@ const Navigation = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
-          <div className="flex items-center space-x-2 transform transition-transform duration-300 hover:scale-105 hover-glow">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-sky-400 rounded-lg flex items-center justify-center animate-pulse hover-glow">
-              <Plane className="w-6 h-6 text-white transform transition-transform duration-300 hover:rotate-12" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-white">The Dunes Group</h1>
-              <p className="text-xs text-gray-300">Aviation Ecosystem</p>
+          <div className="flex items-center space-x-2 transform transition-transform duration-300 hover:scale-105 ">
+            <div className="relative group">
+              <img
+                src="/DUNES-LOGO-WIDE.png"
+                alt="Dunes Group Logo"
+                className={`h-14 w-auto object-contain transition-all duration-300 ${
+                  isLogoHovered || activeSection ? "logo-gradient-overlay" : ""
+                }`}
+                onMouseEnter={() => setIsLogoHovered(true)}
+                onMouseLeave={() => setIsLogoHovered(false)}
+                style={{ cursor: "pointer" }}
+              />
             </div>
           </div>
 
@@ -89,11 +95,11 @@ const Navigation = () => {
                 key={item.name}
                 onClick={() => scrollToSection(item.id)}
                 className={`transition-all duration-300 font-medium hover-scale ${
-                  activeSection === item.id
-                    ? "text-blue-400"
-                    : "text-gray-300 hover:text-blue-400"
+                  activeSection === item.id ? "text-[#D9AC40]" : "text-white"
                 }`}
                 style={{ animationDelay: `${index * 100}ms` }}
+                onMouseEnter={() => setIsLogoHovered(true)}
+                onMouseLeave={() => setIsLogoHovered(false)}
               >
                 {item.name}
               </button>

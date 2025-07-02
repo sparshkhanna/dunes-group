@@ -3,18 +3,16 @@ import { Plane } from "lucide-react";
 import AnimatedElement from "./AnimatedElement";
 
 const Footer = () => (
-  <footer className="bg-slate-900 border-t border-slate-800 py-12">
+  <footer className="bg-dunes-gradient border-t border-slate-800 py-12">
     <div className="max-w-7xl mx-auto px-4">
       <div className="grid md:grid-cols-4 gap-8">
         <AnimatedElement animation="slideInLeft" delay={100}>
           <div className="flex items-center space-x-2 mb-4">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-sky-400 rounded-lg flex items-center justify-center animate-pulse hover-glow">
-              <Plane className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h3 className="text-lg font-bold text-white">The Dunes Group</h3>
-              <p className="text-xs text-gray-400">Aviation Ecosystem</p>
-            </div>
+            <img
+              src="/DUNES-LOGO-WIDE.png"
+              alt="Dunes Group Logo"
+              className="h-14 w-auto object-contain"
+            />
           </div>
           <p className="text-gray-400 text-sm">
             Building excellence in aviation through integrated training,

@@ -101,14 +101,14 @@ const fleet = [
 
 const DunesAviationLanding = () => {
   return (
-    <div className="min-h-screen bg-slate-900 text-white">
+    <div className="min-h-screen bg-dunes-gradient text-white">
       <Navigation />
       <HeroSection />
-      <StatsSection stats={stats} />
+      <StatsSection stats={stats} lightBg />
       <AboutSection />
-      <ServicesSection services={services} />
+      <ServicesSection services={services} lightBg />
       <FleetSection fleet={fleet} />
-      <ContactSection />
+      <ContactSection lightBg />
       <Footer />
       <ScrollToTop />
     </div>

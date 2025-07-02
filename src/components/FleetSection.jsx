@@ -2,10 +2,7 @@ import React from "react";
 import AnimatedElement from "./AnimatedElement";
 
 const FleetSection = ({ fleet }) => (
-  <section
-    id="fleet"
-    className="py-20 bg-gradient-to-b from-slate-800 to-slate-900"
-  >
+  <section id="fleet" className="py-20 bg-dunes-gradient">
     <div className="max-w-7xl mx-auto px-4">
       <AnimatedElement animation="fadeInUp" className="text-center mb-16">
         <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">

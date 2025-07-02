@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -536,15 +537,46 @@ html {
 
 /* Global font settings */
 body,
-p {
-  font-family: "Outfit", sans-serif;
-}
+p,
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-  font-family: "Francy", serif;
-  letter-spacing: 0.05em; /* tracking-wide */
+  font-family: "Noto Sans", sans-serif;
+}
+
+body {
+  background: #191929;
+}
+
+.bg-dunes-gradient {
+  background: linear-gradient(135deg, #191929 0%, #23233a 100%);
+}
+
+.logo-gradient-overlay {
+  position: relative;
+}
+.logo-gradient-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, #d9ac40 0%, #59596b 100%);
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  border-radius: 0.25rem;
+}
+
+.nav-gradient-text {
+  background: linear-gradient(90deg, #d9ac40 0%, #d9ac40 60%, #59596b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+.gold-glow {
+  text-shadow: 0 0 8px #ffd700, 0 0 16px #d9ac40, 0 0 32px #ffd700;
 }

@@ -3,7 +3,7 @@ import { Plane, Home, ArrowLeft } from "lucide-react";
 
 const NotFound = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-900">
+    <div className="min-h-screen flex items-center justify-center bg-dunes-gradient">
       <div className="text-center max-w-2xl mx-auto px-4">
         {/* Animated Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800">

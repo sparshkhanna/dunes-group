@@ -48,12 +48,12 @@ const HeroSection = () => {
           <div className="mb-8">
             <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
               Building a Seamless
-              <span className="bg-gradient-to-r from-blue-400 via-sky-300 to-purple-400 bg-clip-text text-transparent animate-gradient">
+              <span className="bg-gradient-to-r from-[#D9AC40] to-[#FFD700] bg-clip-text text-transparent animate-gradient">
                 {" "}
                 Aviation Ecosystem
               </span>
             </h1>
-            <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
+            <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto">
               Excellence Across Pilot Training, Aircraft Operations & Technical
               Support
             </p>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Award, GraduationCap, Plane, Shield } from "lucide-react";
 import AnimatedElement from "./AnimatedElement";
 
-const StatsSection = ({ stats }) => {
+const StatsSection = ({ stats, lightBg }) => {
   const [counts, setCounts] = useState(stats.map(() => 0));
 
   useEffect(() => {
@@ -41,7 +41,12 @@ const StatsSection = ({ stats }) => {
   }, [stats]);
 
   return (
-    <section id="stats" className="py-20 bg-slate-800/50">
+    <section
+      id="stats"
+      className={`py-20 ${
+        lightBg ? "bg-white text-[#191929]" : "bg-dunes-gradient text-white"
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4">
         <AnimatedElement
           animation="stagger"
@@ -50,17 +55,39 @@ const StatsSection = ({ stats }) => {
           {stats.map((stat, index) => (
             <div
               key={index}
-              className="text-center group hover-scale hover-glow"
+              className={`text-center group hover-scale hover-glow ${
+                lightBg ? "text-[#191929]" : ""
+              }`}
             >
               <div className="mb-4 flex justify-center">
-                <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-sky-400 rounded-full flex items-center justify-center group-hover:scale-110 transition-all duration-500 animate-float hover-glow">
-                  <stat.icon className="w-8 h-8 text-white group-hover:rotate-12 transition-transform duration-300" />
+                <div
+                  className={`w-16 h-16 rounded-full flex items-center justify-center group-hover:scale-110 transition-all duration-500 animate-float hover-glow ${
+                    lightBg
+                      ? "bg-[#191929]/10"
+                      : "bg-gradient-to-r from-blue-500 to-sky-400"
+                  }`}
+                >
+                  <stat.icon
+                    className={`w-8 h-8 ${
+                      lightBg ? "text-[#191929]" : "text-white"
+                    } group-hover:rotate-12 transition-transform duration-300`}
+                  />
                 </div>
               </div>
-              <div className="text-3xl md:text-4xl font-bold text-white mb-2 animate-countUp">
+              <div
+                className={`text-3xl md:text-4xl font-bold mb-2 animate-countUp ${
+                  lightBg ? "text-[#191929]" : "text-white"
+                }`}
+              >
                 {counts[index]}
               </div>
-              <div className="text-gray-300 font-medium">{stat.label}</div>
+              <div
+                className={`font-medium ${
+                  lightBg ? "text-[#191929]" : "text-gray-300"
+                }`}
+              >
+                {stat.label}
+              </div>
             </div>
           ))}
         </AnimatedElement>
