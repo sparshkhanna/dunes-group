@@ -77,9 +77,9 @@ const Navigation = () => {
           <div className="flex items-center space-x-2 transform transition-transform duration-300 hover:scale-105 ">
             <div className="relative group">
               <img
-                src="/DUNES-LOGO-WIDE.png"
+                src="/dunes-group-logo.png"
                 alt="Dunes Group Logo"
-                className={`h-14 w-auto object-contain transition-all duration-300 ${
+                className={`h-10 w-auto object-contain transition-all duration-300 ${
                   isLogoHovered || activeSection ? "logo-gradient-overlay" : ""
                 }`}
                 onMouseEnter={() => setIsLogoHovered(true)}
@@ -94,7 +94,7 @@ const Navigation = () => {
               <button
                 key={item.name}
                 onClick={() => scrollToSection(item.id)}
-                className={`transition-all duration-300 font-medium hover-scale ${
+                className={`transition-all duration-500 font-medium transform hover:scale-105 ${
                   activeSection === item.id ? "text-[#D9AC40]" : "text-white"
                 }`}
                 style={{ animationDelay: `${index * 100}ms` }}
@@ -123,7 +123,7 @@ const Navigation = () => {
               <button
                 key={item.name}
                 onClick={() => scrollToSection(item.id)}
-                className={`block w-full text-left py-2 transition-all duration-300 hover-scale ${
+                className={`block w-full text-left py-2 transition-all duration-500 transform hover:scale-105 ${
                   activeSection === item.id
                     ? "text-blue-400"
                     : "text-gray-300 hover:text-blue-400"

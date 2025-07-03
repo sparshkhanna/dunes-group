@@ -3,13 +3,13 @@ import { Plane } from "lucide-react";
 import AnimatedElement from "./AnimatedElement";
 
 const Footer = () => (
-  <footer className="bg-dunes-gradient border-t border-slate-800 py-12">
+  <footer className="bg-slate-900/95 backdrop-blur-md border-t border-slate-800 py-12">
     <div className="max-w-7xl mx-auto px-4">
       <div className="grid md:grid-cols-4 gap-8">
         <AnimatedElement animation="slideInLeft" delay={100}>
           <div className="flex items-center space-x-2 mb-4">
             <img
-              src="/DUNES-LOGO-WIDE.png"
+              src="/dunes-group-logo.png"
               alt="Dunes Group Logo"
               className="h-14 w-auto object-contain"
             />
@@ -67,7 +67,7 @@ const Footer = () => (
       <AnimatedElement animation="fadeInUp" delay={500}>
         <div className="border-t border-slate-800 mt-8 pt-8 text-center">
           <p className="text-gray-400 text-sm">
-            © 2024 The Dunes Group. All rights reserved.
+            © 2025 The Dunes Group. All rights reserved.
           </p>
         </div>
       </AnimatedElement>

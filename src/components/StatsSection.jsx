@@ -44,7 +44,9 @@ const StatsSection = ({ stats, lightBg }) => {
     <section
       id="stats"
       className={`py-20 ${
-        lightBg ? "bg-white text-[#191929]" : "bg-dunes-gradient text-white"
+        lightBg
+          ? "bg-white text-slate-900"
+          : "bg-slate-900/95 backdrop-blur-md text-white"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4">
@@ -55,35 +57,35 @@ const StatsSection = ({ stats, lightBg }) => {
           {stats.map((stat, index) => (
             <div
               key={index}
-              className={`text-center group hover-scale hover-glow ${
-                lightBg ? "text-[#191929]" : ""
+              className={`text-center group transition-all duration-500 transform hover:scale-105  ${
+                lightBg ? "text-slate-900" : ""
               }`}
             >
               <div className="mb-4 flex justify-center">
                 <div
-                  className={`w-16 h-16 rounded-full flex items-center justify-center group-hover:scale-110 transition-all duration-500 animate-float hover-glow ${
+                  className={`w-16 h-16 rounded-full flex items-center justify-center group-hover:scale-110 transition-all duration-500 animate-float  ${
                     lightBg
-                      ? "bg-[#191929]/10"
+                      ? "bg-[#D9AC40]/10"
                       : "bg-gradient-to-r from-blue-500 to-sky-400"
                   }`}
                 >
                   <stat.icon
                     className={`w-8 h-8 ${
-                      lightBg ? "text-[#191929]" : "text-white"
+                      lightBg ? "text-[#D9AC40]" : "text-white"
                     } group-hover:rotate-12 transition-transform duration-300`}
                   />
                 </div>
               </div>
               <div
                 className={`text-3xl md:text-4xl font-bold mb-2 animate-countUp ${
-                  lightBg ? "text-[#191929]" : "text-white"
+                  lightBg ? "text-slate-900" : "text-white"
                 }`}
               >
                 {counts[index]}
               </div>
               <div
                 className={`font-medium ${
-                  lightBg ? "text-[#191929]" : "text-gray-300"
+                  lightBg ? "text-slate-900" : "text-gray-300"
                 }`}
               >
                 {stat.label}

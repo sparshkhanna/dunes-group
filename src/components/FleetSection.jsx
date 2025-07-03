@@ -2,12 +2,12 @@ import React from "react";
 import AnimatedElement from "./AnimatedElement";
 
 const FleetSection = ({ fleet }) => (
-  <section id="fleet" className="py-20 bg-dunes-gradient">
+  <section id="fleet" className="py-20 bg-slate-900/95 backdrop-blur-md">
     <div className="max-w-7xl mx-auto px-4">
       <AnimatedElement animation="fadeInUp" className="text-center mb-16">
         <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
           Our{" "}
-          <span className="bg-gradient-to-r from-blue-400 via-sky-300 to-purple-400 bg-clip-text text-transparent animate-gradient">
+          <span className="animate-motion-gradient bg-clip-text text-transparent">
             Fleet
           </span>
         </h2>
@@ -24,17 +24,39 @@ const FleetSection = ({ fleet }) => (
             delay={index * 200}
             className="group"
           >
-            <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-slate-700 hover:border-blue-500/50 transition-all duration-500 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/10 hover-lift hover-glow">
+            <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-slate-700 hover:border-[#D9AC40]/50 transition-all duration-500 transform hover:scale-105 hover:shadow-2xl hover:shadow-[#D9AC40]/10">
               <div className="text-center mb-6">
-                <div className="text-6xl mb-4 group-hover:scale-110 transition-transform duration-500 animate-float hover-glow">
-                  {aircraft.image}
+                <div className="mb-4 group-hover:scale-110 transition-transform duration-500 animate-float">
+                  {aircraft.name === "Cessna 208B Grand Caravan" ? (
+                    <img
+                      src="/grand.jpg"
+                      alt="Cessna 208B Grand Caravan"
+                      className="w-full h-48 object-cover rounded-lg shadow-lg"
+                    />
+                  ) : aircraft.name.includes("Citation") ? (
+                    <img
+                      src="/citation.webp"
+                      alt={aircraft.name}
+                      className="w-full h-48 object-cover rounded-lg shadow-lg"
+                    />
+                  ) : aircraft.name.includes("Challenger") ? (
+                    <img
+                      src="/challenger.webp"
+                      alt={aircraft.name}
+                      className="w-full h-48 object-cover rounded-lg shadow-lg"
+                    />
+                  ) : (
+                    <div className="text-6xl">{aircraft.image}</div>
+                  )}
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-2">
-                  <span className="bg-gradient-to-r from-blue-400 to-sky-300 bg-clip-text text-transparent">
+                <div className="text-center mb-2">
+                  <div className="text-[#D9AC40] font-bold text-lg md:text-xl mb-1">
                     {aircraft.name}
-                  </span>
-                </h3>
-                <p className="text-blue-400 font-semibold">{aircraft.type}</p>
+                  </div>
+                  <div className="text-[#D9AC40] font-semibold text-base md:text-lg">
+                    {aircraft.type}
+                  </div>
+                </div>
               </div>
 
               <div className="space-y-4">
@@ -53,7 +75,7 @@ const FleetSection = ({ fleet }) => (
               </div>
 
               <div className="mt-6">
-                <button className="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 animate-pulse hover-lift hover-glow">
+                <button className="w-full bg-[#D9AC40] hover:bg-[#FFD700] text-white px-6 py-3 rounded-lg font-semibold transition-all duration-500 transform hover:scale-105 hover:shadow-2xl hover:shadow-[#D9AC40]/25 animate-pulse">
                   Charter Now
                 </button>
               </div>

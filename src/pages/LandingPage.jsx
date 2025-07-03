@@ -101,7 +101,7 @@ const fleet = [
 
 const DunesAviationLanding = () => {
   return (
-    <div className="min-h-screen bg-dunes-gradient text-white">
+    <div className="min-h-screen bg-dunes-gradient text-white overflow-x-hidden w-full">
       <Navigation />
       <HeroSection />
       <StatsSection stats={stats} lightBg />

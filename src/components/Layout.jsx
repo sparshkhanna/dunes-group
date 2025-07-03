@@ -21,7 +21,7 @@ const Layout = ({ children }) => {
         <div className="flex justify-between items-center py-4">
           <div className="flex items-center space-x-2">
             <img
-              src="/DUNES-LOGO-WIDE.png"
+              src="/dunes-group-logo.png"
               alt="Dunes Group Logo"
               className="h-14 w-auto object-contain"
             />
@@ -83,7 +83,7 @@ const Layout = ({ children }) => {
           <div>
             <div className="flex items-center space-x-2 mb-4">
               <img
-                src="/DUNES-LOGO-WIDE.png"
+                src="/dunes-group-logo.png"
                 alt="Dunes Group Logo"
                 className="h-14 w-auto object-contain"
               />
