@@ -668,3 +668,19 @@ body {
 .gold-glow {
   text-shadow: 0 0 8px #ffd700, 0 0 16px #d9ac40, 0 0 32px #ffd700;
 }
+
+/* Prevent initial layout shifts */
+#home {
+  overflow: hidden !important;
+}
+
+/* Ensure hero content doesn't overflow initially */
+#home h1 {
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Hide scrollbars during page load */
+body.loading {
+  overflow: hidden;
+}

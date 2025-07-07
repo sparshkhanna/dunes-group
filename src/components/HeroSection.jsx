@@ -12,7 +12,7 @@ const HeroSection = () => {
   return (
     <section
       id="home"
-      className="relative h-screen flex items-center justify-center"
+      className="relative h-screen flex items-center justify-center overflow-hidden"
     >
       {/* Background Video */}
       <video
@@ -43,49 +43,55 @@ const HeroSection = () => {
         </div>
       </div>
 
-      <div className="relative z-40 text-center max-w-4xl mx-auto px-4">
-        <AnimatedElement animation="fadeInUp" delay={200}>
-          <div className="mb-8">
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-              Building a Seamless
-              <span className="animate-motion-gradient bg-clip-text text-transparent">
-                {" "}
-                Aviation Ecosystem
-              </span>
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto">
-              Excellence Across Pilot Training, Aircraft Operations & Technical
-              Support
-            </p>
-          </div>
-        </AnimatedElement>
-        <AnimatedElement animation="fadeInUp" delay={400}>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <button
-              onClick={() => {
-                const element = document.getElementById("services");
-                if (element) element.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="bg-[#D9AC40] hover:bg-[#FFD700] text-white px-8 py-3 rounded-lg font-semibold transition-all duration-500 transform hover:scale-105 hover:shadow-2xl hover:shadow-[#D9AC40]/25"
-            >
-              Explore Our Services
-            </button>
-            <button
-              onClick={() => {
-                const element = document.getElementById("contact");
-                if (element) element.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="border-2 border-[#D9AC40] text-[#D9AC40] hover:bg-[#D9AC40] hover:text-white px-8 py-3 rounded-lg font-semibold transition-all duration-500 transform hover:scale-105 hover:shadow-2xl hover:shadow-[#D9AC40]/25"
-            >
-              Get in Touch
-            </button>
-          </div>
-        </AnimatedElement>
-        <AnimatedElement animation="fadeInUp" delay={600}>
-          <div className="animate-bounce">
-            <ChevronDown className="w-8 h-8 text-[#D9AC40] mx-auto animate-pulse" />
-          </div>
-        </AnimatedElement>
+      <div className="relative z-40 text-center max-w-4xl mx-auto px-4 h-full flex flex-col justify-center">
+        <div
+          style={{
+            opacity: mounted ? 1 : 0,
+            transition: "opacity 0.3s ease-in-out",
+          }}
+        >
+          <AnimatedElement animation="fadeInUp" delay={200}>
+            <div className="mb-6">
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4 leading-tight">
+                Building a Seamless <br />
+                <span className="animate-motion-gradient bg-clip-text text-transparent">
+                  Aviation Ecosystem
+                </span>
+              </h1>
+              <p className="text-lg md:text-xl lg:text-2xl text-gray-300 mb-6 max-w-4xl mx-auto">
+                Excellence Across Pilot Training, Aircraft Operations &
+                Technical Support
+              </p>
+            </div>
+          </AnimatedElement>
+          <AnimatedElement animation="fadeInUp" delay={400}>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+              <button
+                onClick={() => {
+                  const element = document.getElementById("services");
+                  if (element) element.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="bg-[#D9AC40] hover:bg-[#FFD700] text-white px-8 py-3 rounded-lg font-semibold transition-all duration-500 transform hover:scale-105 hover:shadow-2xl hover:shadow-[#D9AC40]/25"
+              >
+                Explore Our Services
+              </button>
+              <button
+                onClick={() => {
+                  const element = document.getElementById("contact");
+                  if (element) element.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="border-2 border-[#D9AC40] text-[#D9AC40] hover:bg-[#D9AC40] hover:text-white px-8 py-3 rounded-lg font-semibold transition-all duration-500 transform hover:scale-105 hover:shadow-2xl hover:shadow-[#D9AC40]/25"
+              >
+                Get in Touch
+              </button>
+            </div>
+          </AnimatedElement>
+          <AnimatedElement animation="fadeInUp" delay={600}>
+            <div className="animate-bounce">
+              <ChevronDown className="w-8 h-8 text-[#D9AC40] mx-auto animate-pulse" />
+            </div>
+          </AnimatedElement>
+        </div>
       </div>
     </section>
   );
