@@ -1,3 +1,25 @@
 # https://www.robotstxt.org/robotstxt.html
+# Security-focused robots.txt
 User-agent: *
-Disallow:
+Disallow: /src/
+Disallow: /node_modules/
+Disallow: /build/
+Disallow: /static/
+Disallow: /assets/
+Disallow: /utils/
+Disallow: /components/
+Disallow: /hooks/
+Disallow: /pages/
+
+# Prevent indexing of source files
+User-agent: *
+Disallow: /*.js$
+Disallow: /*.jsx$
+Disallow: /*.ts$
+Disallow: /*.tsx$
+Disallow: /*.css$
+Disallow: /*.map$
+
+# Allow only main pages
+Allow: /$
+Allow: /index.html
