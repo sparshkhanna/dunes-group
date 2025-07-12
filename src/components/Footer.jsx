@@ -63,16 +63,16 @@ const Footer = () => (
           <h4 className="text-white font-semibold mb-4">Contact</h4>
           <ul className="space-y-2 text-gray-400 text-sm">
             <li className="hover:text-blue-400 transition-colors duration-300 cursor-pointer hover-scale">
-              +1 (555) 123-4567
+              +91 96101 60999
             </li>
             <li className="hover:text-blue-400 transition-colors duration-300 cursor-pointer hover-scale">
-              info@dunesgroup.com
+              info@dunesaviation.in
             </li>
             <li className="hover:text-blue-400 transition-colors duration-300 cursor-pointer hover-scale">
-              Aviation Hub
+              703, The Umed Heights
             </li>
             <li className="hover:text-blue-400 transition-colors duration-300 cursor-pointer hover-scale">
-              International Airport
+              Jodhpur, Rajasthan, India
             </li>
           </ul>
         </div>

@@ -91,7 +91,8 @@ const Contact = () => {
                   <div>
                     <h4 className="font-semibold text-gray-800">Address</h4>
                     <p className="text-gray-600">
-                      Aviation Complex, Dubai, UAE
+                      703, The Umed Heights, Cazri Road Light Industrial Area,
+                      Milkman Colony Jodhpur, Rajasthan, India- 342003
                     </p>
                   </div>
                 </div>
@@ -114,7 +115,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-800">Phone</h4>
-                    <p className="text-gray-600">+971 4 XXX XXXX</p>
+                    <p className="text-gray-600">+91 96101 60999</p>
                   </div>
                 </div>
 
@@ -136,7 +137,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-800">Email</h4>
-                    <p className="text-gray-600">info@dunesgroup.com</p>
+                    <p className="text-gray-600">info@dunesaviation.in</p>
                   </div>
                 </div>
               </div>

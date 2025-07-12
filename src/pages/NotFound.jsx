@@ -75,13 +75,13 @@ const NotFound = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center text-sm">
               <a
-                href="mailto:info@dunesgroup.com"
+                href="mailto:info@dunesaviation.in"
                 className="text-blue-400 hover:text-blue-300 transition-colors"
               >
-                info@dunesgroup.com
+                info@dunesaviation.in
               </a>
               <span className="text-gray-500 hidden sm:inline">|</span>
-              <span className="text-gray-300">+1 (555) 123-4567</span>
+              <span className="text-gray-300">+91 96101 60999</span>
             </div>
           </div>
         </div>

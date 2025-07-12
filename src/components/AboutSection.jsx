@@ -27,10 +27,12 @@ const AboutSection = () => (
                 Our <span className="text-[#D9AC40]">Vision</span>
               </h3>
               <p className="text-gray-300 leading-relaxed">
-                To create a seamless aviation ecosystem where training
-                excellence, operational efficiency, and technical expertise
-                converge to deliver unparalleled service in the aviation
-                industry.
+                To be a leading force in shaping the future of aviation in India
+                and beyond - by building a vertically integrated ecosystem that
+                sets new benchmarks in air charter services (NSOP), flight
+                training (FTO), and aircraft maintenance (MRO & CAMO),
+                empowering the next generation of aviation professionals and
+                connecting the skies with purpose and precision.
               </p>
             </div>
           </AnimatedElement>
@@ -41,8 +43,12 @@ const AboutSection = () => (
                 Our <span className="text-[#D9AC40]">Mission</span>
               </h3>
               <p className="text-gray-300 leading-relaxed">
-                Providing world-class aviation services through innovation,
-                safety, and commitment to excellence across all our verticals.
+                To elevate India's aviation ecosystem by delivering safe,
+                efficient, and future-ready solutions through high-quality
+                flight operations, world-class pilot training, and trusted
+                maintenance services. At Dunes Group, we are committed to
+                operational excellence, regulatory compliance, and continuous
+                innovation across all our aviation verticals.
               </p>
             </div>
           </AnimatedElement>

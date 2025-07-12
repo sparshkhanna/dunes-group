@@ -27,9 +27,9 @@ const stats = [
     icon: require("lucide-react").Plane,
   },
   {
-    number: "99.9%",
-    label: "Safety Record",
-    icon: require("lucide-react").Shield,
+    number: "1000+",
+    label: "Flight Hours",
+    icon: require("lucide-react").Timer,
   },
 ];
 

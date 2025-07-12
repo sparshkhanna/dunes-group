@@ -34,7 +34,7 @@ const ServicesSection = ({ services, lightBg }) => (
         </p>
       </AnimatedElement>
 
-      <div className="grid md:grid-cols-3 gap-8">
+      <div className="grid md:grid-cols-3 gap-8 p-4">
         {services.map((service, index) => (
           <AnimatedElement
             key={index}
@@ -43,7 +43,12 @@ const ServicesSection = ({ services, lightBg }) => (
             className="group h-full"
           >
             <div
-              className={`h-full rounded-2xl p-8 border transition-all duration-500 transform hover:scale-105 hover:shadow-2xl hover:shadow-[#D9AC40]/10 flex flex-col ${
+              onClick={() => {
+                if (service.brand === "Dunes Aviation Academy") {
+                  window.open("https://dunesaviation.in/", "_blank");
+                }
+              }}
+              className={`h-full rounded-2xl p-8 border transition-all duration-500 transform hover:scale-[1.03] hover:shadow-2xl hover:shadow-[#D9AC40]/10 flex flex-col cursor-pointer relative z-10 hover:z-20 ${
                 lightBg
                   ? "bg-[#191929]/5 border-[#191929]/10"
                   : "bg-slate-800/50 backdrop-blur-sm border-slate-700 hover:border-[#D9AC40]/50"
@@ -118,6 +123,12 @@ const ServicesSection = ({ services, lightBg }) => (
 
               <div className="mt-auto">
                 <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (service.brand === "Dunes Aviation Academy") {
+                      window.open("https://dunesaviation.in/", "_blank");
+                    }
+                  }}
                   className={`text-[#D9AC40] hover:text-[#FFD700] font-semibold flex items-center space-x-2 group-hover:translate-x-2 transition-all duration-500 hover:shadow-lg hover:shadow-[#D9AC40]/25 ${
                     lightBg
                       ? "text-[#D9AC40] hover:text-[#FFD700]"

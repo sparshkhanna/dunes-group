@@ -123,10 +123,10 @@ const Layout = ({ children }) => {
           <div>
             <h4 className="text-white font-semibold mb-4">Contact</h4>
             <ul className="space-y-2 text-gray-400 text-sm">
-              <li>+1 (555) 123-4567</li>
-              <li>info@dunesgroup.com</li>
-              <li>Aviation Hub</li>
-              <li>International Airport</li>
+              <li>+91 96101 60999</li>
+              <li>info@dunesaviation.in</li>
+              <li>703, The Umed Heights</li>
+              <li>Jodhpur, Rajasthan, India</li>
             </ul>
           </div>
         </div>

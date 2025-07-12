@@ -54,10 +54,17 @@ const ContactSection = ({ lightBg }) => {
               {
                 icon: MapPin,
                 title: "Location",
-                content: "Aviation Hub, International Airport",
+                content:
+                  "703, The Umed Heights, Cazri Road Light Industrial Area, Milkman Colony Jodhpur, Rajasthan, India- 342003",
               },
-              { icon: Phone, title: "Phone", content: "+1 (555) 123-4567" },
-              { icon: Mail, title: "Email", content: "info@dunesgroup.com" },
+              {
+                icon: MapPin,
+                title: "Flying Base",
+                content:
+                  "Ahmedabad Airport | Bhavnagar Airport | Bhilwara Airstrip",
+              },
+              { icon: Phone, title: "Phone", content: "+91 96101 60999" },
+              { icon: Mail, title: "Email", content: "info@dunesaviation.in" },
             ].map((item, index) => (
               <div
                 key={index}
