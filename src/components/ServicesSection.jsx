@@ -9,7 +9,7 @@ const ServicesSection = ({ services, lightBg }) => (
       lightBg ? "bg-white" : "bg-slate-900/95 backdrop-blur-md text-white"
     }`}
   >
-    <div className="max-w-7xl mx-auto px-4">
+    <div className="max-w-6xl mx-auto px-4">
       <AnimatedElement
         animation="fadeInUp"
         className={`text-center mb-16 ${lightBg ? "text-[#191929]" : ""}`}

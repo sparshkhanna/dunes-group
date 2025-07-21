@@ -4,7 +4,7 @@ import AnimatedElement from "./AnimatedElement";
 
 const AboutSection = () => (
   <section id="about" className="py-20 bg-slate-900/95 backdrop-blur-md">
-    <div className="max-w-7xl mx-auto px-4">
+    <div className="max-w-6xl mx-auto px-4">
       <AnimatedElement animation="fadeInUp" className="text-center mb-16">
         <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
           Unified{" "}
@@ -14,7 +14,8 @@ const AboutSection = () => (
         </h2>
         <p className="text-xl text-gray-300 max-w-3xl mx-auto">
           The Dunes Group represents a comprehensive approach to aviation
-          services, integrating training, operations, and technical support
+          services, integrating training, operations,<br/> 
+          and technical support
           under one unified platform.
         </p>
       </AnimatedElement>

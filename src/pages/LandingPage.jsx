@@ -100,6 +100,21 @@ const fleet = [
 ];
 
 const DunesAviationLanding = () => {
+  const [selectedAircraft, setSelectedAircraft] = useState(null);
+
+  const handleAircraftSelection = (aircraft, type) => {
+    setSelectedAircraft({ ...aircraft, type });
+
+    // Smooth scroll to contact section
+    const contactSection = document.getElementById("contact");
+    if (contactSection) {
+      contactSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-dunes-gradient text-white w-full">
       <Navigation />
@@ -107,8 +122,11 @@ const DunesAviationLanding = () => {
       <StatsSection stats={stats} lightBg />
       <AboutSection />
       <ServicesSection services={services} lightBg />
-      <FleetSection fleet={fleet} />
-      <ContactSection lightBg />
+      <FleetSection
+        fleet={fleet}
+        onAircraftSelection={handleAircraftSelection}
+      />
+      <ContactSection lightBg selectedAircraft={selectedAircraft} />
       <Footer />
       <ScrollToTop />
     </div>

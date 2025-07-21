@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MapPin, Phone, Mail } from "lucide-react";
 import AnimatedElement from "./AnimatedElement";
 import { Listbox } from "@headlessui/react";
@@ -12,8 +12,42 @@ const serviceOptions = [
   { value: "other", label: "Other" },
 ];
 
-const ContactSection = ({ lightBg }) => {
+const ContactSection = ({ lightBg, selectedAircraft }) => {
   const [selectedService, setSelectedService] = useState(serviceOptions[0]);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    message: "",
+    aircraftInfo: "",
+  });
+
+  // Auto-fill form when aircraft is selected
+  useEffect(() => {
+    if (selectedAircraft) {
+      const isTraining = selectedAircraft.type === "training";
+      const serviceType = isTraining ? "training" : "charter";
+      setSelectedService(
+        serviceOptions.find((option) => option.value === serviceType) ||
+          serviceOptions[0]
+      );
+
+      setFormData((prev) => ({
+        ...prev,
+        aircraftInfo: `${selectedAircraft.name} - ${selectedAircraft.type}`,
+        message: isTraining
+          ? `I'm interested in pilot training using the ${selectedAircraft.name} (${selectedAircraft.type}).\n\nAircraft Details:\n- Capacity: ${selectedAircraft.capacity}\n- Range: ${selectedAircraft.range}\n\nPlease provide more information about training programs, schedules, and pricing for this aircraft.`
+          : `I'm interested in chartering the ${selectedAircraft.name} (${selectedAircraft.type}).\n\nAircraft Details:\n- Capacity: ${selectedAircraft.capacity}\n- Range: ${selectedAircraft.range}\n\nPlease provide more information about availability and pricing.`,
+      }));
+    }
+  }, [selectedAircraft]);
+
+  const handleInputChange = (field, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
 
   return (
     <section
@@ -24,7 +58,7 @@ const ContactSection = ({ lightBg }) => {
           : "bg-slate-900/95 backdrop-blur-md text-white"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="max-w-6xl mx-auto px-4">
         <AnimatedElement
           animation="fadeInUp"
           className={`text-center mb-16 ${lightBg ? "text-slate-900" : ""}`}
@@ -114,12 +148,39 @@ const ContactSection = ({ lightBg }) => {
                   : "bg-slate-800/50 backdrop-blur-sm border-slate-700"
               }`}
             >
+              {selectedAircraft && (
+                <div
+                  className={`mb-6 p-4 rounded-lg border-l-4 ${
+                    selectedAircraft.type === "training"
+                      ? "border-blue-500 bg-blue-500/10"
+                      : "border-[#D9AC40] bg-[#D9AC40]/20"
+                  } ${lightBg ? "text-slate-900" : "text-white"}`}
+                >
+                  <h4 className="font-semibold mb-2">
+                    {selectedAircraft.type === "training"
+                      ? "Selected Training Aircraft:"
+                      : "Selected Charter Aircraft:"}
+                  </h4>
+                  <p className="text-sm opacity-90">{selectedAircraft.name}</p>
+                  <p className="text-sm opacity-90">{selectedAircraft.type}</p>
+                  <p className="text-xs opacity-75 mt-1">
+                    {selectedAircraft.type === "training"
+                      ? "Perfect for pilot training programs"
+                      : "Ideal for charter services"}
+                  </p>
+                </div>
+              )}
+
               <div className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <input
                       type="text"
                       placeholder="First Name"
+                      value={formData.firstName}
+                      onChange={(e) =>
+                        handleInputChange("firstName", e.target.value)
+                      }
                       className={`w-full rounded-lg px-4 py-3 focus:outline-none focus:ring-2 transition-all duration-300 ${
                         lightBg
                           ? "bg-white border-slate-900/20 text-slate-900 placeholder-slate-900/40 focus:ring-[#D9AC40] hover:border-[#D9AC40]"
@@ -131,6 +192,10 @@ const ContactSection = ({ lightBg }) => {
                     <input
                       type="text"
                       placeholder="Last Name"
+                      value={formData.lastName}
+                      onChange={(e) =>
+                        handleInputChange("lastName", e.target.value)
+                      }
                       className={`w-full rounded-lg px-4 py-3 focus:outline-none focus:ring-2 transition-all duration-300 ${
                         lightBg
                           ? "bg-white border-slate-900/20 text-slate-900 placeholder-slate-900/40 focus:ring-[#D9AC40] hover:border-[#D9AC40]"
@@ -144,6 +209,8 @@ const ContactSection = ({ lightBg }) => {
                   <input
                     type="email"
                     placeholder="Email Address"
+                    value={formData.email}
+                    onChange={(e) => handleInputChange("email", e.target.value)}
                     className={`w-full rounded-lg px-4 py-3 focus:outline-none focus:ring-2 transition-all duration-300 ${
                       lightBg
                         ? "bg-white border-slate-900/20 text-slate-900 placeholder-slate-900/40 focus:ring-[#D9AC40] hover:border-[#D9AC40]"
@@ -208,6 +275,10 @@ const ContactSection = ({ lightBg }) => {
                   <textarea
                     placeholder="Your Message"
                     rows="4"
+                    value={formData.message}
+                    onChange={(e) =>
+                      handleInputChange("message", e.target.value)
+                    }
                     className={`w-full rounded-lg px-4 py-3 focus:outline-none focus:ring-2 transition-all duration-300 ${
                       lightBg
                         ? "bg-white border-slate-900/20 text-slate-900 placeholder-slate-900/40 focus:ring-[#D9AC40] hover:border-[#D9AC40]"

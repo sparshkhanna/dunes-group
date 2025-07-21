@@ -1,7 +1,7 @@
 import React from "react";
 import AnimatedElement from "./AnimatedElement";
 
-const FleetSection = ({ fleet }) => {
+const FleetSection = ({ fleet, onAircraftSelection }) => {
   // Split fleet into charter and training aircraft
   const charterAircraft = fleet.filter(
     (aircraft) =>
@@ -46,7 +46,7 @@ const FleetSection = ({ fleet }) => {
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#FFD700] rounded-full blur-3xl"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 relative z-10">
+      <div className="max-w-6xl mx-auto px-4 relative z-10">
         <AnimatedElement animation="fadeInUp" className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
             Our{" "}
@@ -123,7 +123,13 @@ const FleetSection = ({ fleet }) => {
                   </div>
 
                   <div className="mt-6">
-                    <button className="w-full bg-[#D9AC40] hover:bg-[#FFD700] text-white px-6 py-3 rounded-lg font-semibold transition-all duration-500 transform hover:scale-105 hover:shadow-2xl hover:shadow-[#D9AC40]/25 animate-pulse">
+                    <button
+                      onClick={() =>
+                        onAircraftSelection &&
+                        onAircraftSelection(aircraft, "charter")
+                      }
+                      className="w-full bg-[#D9AC40] hover:bg-[#FFD700] text-white px-6 py-3 rounded-lg font-semibold transition-all duration-500 transform hover:scale-105 hover:shadow-2xl hover:shadow-[#D9AC40]/25 animate-pulse"
+                    >
                       Charter Now
                     </button>
                   </div>
@@ -198,7 +204,13 @@ const FleetSection = ({ fleet }) => {
                   </div>
 
                   <div className="mt-6">
-                    <button className="w-full bg-[#D9AC40] hover:bg-[#FFD700] text-white px-6 py-3 rounded-lg font-semibold transition-all duration-500 transform hover:scale-105 hover:shadow-2xl hover:shadow-[#D9AC40]/25 animate-pulse">
+                    <button
+                      onClick={() =>
+                        onAircraftSelection &&
+                        onAircraftSelection(aircraft, "training")
+                      }
+                      className="w-full bg-[#D9AC40] hover:bg-[#FFD700] text-white px-6 py-3 rounded-lg font-semibold transition-all duration-500 transform hover:scale-105 hover:shadow-2xl hover:shadow-[#D9AC40]/25 animate-pulse"
+                    >
                       Learn More
                     </button>
                   </div>
