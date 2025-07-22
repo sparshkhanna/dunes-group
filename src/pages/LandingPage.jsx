@@ -8,6 +8,7 @@ import FleetSection from "../components/FleetSection";
 import ContactSection from "../components/ContactSection";
 import Footer from "../components/Footer";
 import ScrollToTop from "../components/ScrollToTop";
+import SEO from "../components/SEO";
 // import "../LandingPage.css"; // Uncomment if you move custom CSS
 
 const stats = [
@@ -116,20 +117,29 @@ const DunesAviationLanding = () => {
   };
 
   return (
-    <div className="min-h-screen bg-dunes-gradient text-white w-full">
-      <Navigation />
-      <HeroSection />
-      <StatsSection stats={stats} lightBg />
-      <AboutSection />
-      <ServicesSection services={services} lightBg />
-      <FleetSection
-        fleet={fleet}
-        onAircraftSelection={handleAircraftSelection}
+    <>
+      <SEO
+        title="Aviation Ecosystem | Pilot Training, Aircraft Operations & Maintenance"
+        description="The Dunes Group represents the unified strength of three core aviation verticals—Flying Training Organization (FTO), Non-Scheduled Air Operations (NSOP), and Maintenance, Repair & Overhaul (MRO) along with Continuing Airworthiness Management Organization (CAMO) services."
+        keywords="aviation training, pilot training, aircraft operations, maintenance repair overhaul, MRO services, airworthiness management, CAMO, flying school, aviation academy, aircraft charter, cargo operations, aviation maintenance, aircraft repair, aviation services, India aviation"
+        canonical="/"
+        ogType="website"
       />
-      <ContactSection lightBg selectedAircraft={selectedAircraft} />
-      <Footer />
-      <ScrollToTop />
-    </div>
+      <div className="min-h-screen bg-dunes-gradient text-white w-full">
+        <Navigation />
+        <HeroSection />
+        <StatsSection stats={stats} lightBg />
+        <AboutSection />
+        <ServicesSection services={services} lightBg />
+        <FleetSection
+          fleet={fleet}
+          onAircraftSelection={handleAircraftSelection}
+        />
+        <ContactSection lightBg selectedAircraft={selectedAircraft} />
+        <Footer />
+        <ScrollToTop />
+      </div>
+    </>
   );
 };
 

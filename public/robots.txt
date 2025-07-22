@@ -20,6 +20,14 @@ Disallow: /*.tsx$
 Disallow: /*.css$
 Disallow: /*.map$
 
-# Allow only main pages
-Allow: /$
-Allow: /index.html
+# Single page application - only homepage is indexed
+Allow: /
+
+# Disallow other routes (they exist but shouldn't be indexed)
+Disallow: /about
+Disallow: /services
+Disallow: /contact
+Disallow: /fleet
+Disallow: /training
+Disallow: /operations
+Disallow: /maintenance

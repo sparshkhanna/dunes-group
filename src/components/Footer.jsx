@@ -3,7 +3,7 @@ import { Plane } from "lucide-react";
 
 const Footer = () => (
   <footer className="bg-slate-900/95 backdrop-blur-md border-t border-slate-800 py-12 overflow-hidden">
-    <div className="max-w-7xl mx-auto px-4">
+    <div className="max-w-6xl mx-auto px-4">
       <div className="grid md:grid-cols-4 gap-8">
         {/* First column - Logo and description */}
         <div>
