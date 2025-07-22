@@ -1,5 +1,4 @@
-import React from "react";
-import { Helmet } from "react-helmet-async";
+import React, { useEffect } from "react";
 
 const SEO = ({
   title,
@@ -85,49 +84,119 @@ const SEO = ({
     },
   };
 
-  return (
-    <Helmet>
-      {/* Basic Meta Tags */}
-      <title>{fullTitle}</title>
-      <meta name="description" content={description} />
-      <meta name="keywords" content={keywords} />
-      <link rel="canonical" href={fullCanonical} />
+  useEffect(() => {
+    // Update document title
+    document.title = fullTitle;
 
-      {/* Open Graph Meta Tags */}
-      <meta property="og:title" content={fullTitle} />
-      <meta property="og:description" content={description} />
-      <meta property="og:type" content={ogType} />
-      <meta property="og:url" content={fullCanonical} />
-      <meta property="og:image" content={ogImage || defaultImage} />
-      <meta property="og:site_name" content={siteName} />
-      <meta property="og:locale" content="en_US" />
+    // Update or create meta tags
+    const updateMetaTag = (name, content) => {
+      let meta = document.querySelector(`meta[name="${name}"]`);
+      if (!meta) {
+        meta = document.createElement("meta");
+        meta.name = name;
+        document.head.appendChild(meta);
+      }
+      meta.content = content;
+    };
 
-      {/* Twitter Card Meta Tags */}
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={fullTitle} />
-      <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={ogImage || defaultImage} />
-      <meta name="twitter:site" content="@dunesgroup" />
+    const updatePropertyTag = (property, content) => {
+      let meta = document.querySelector(`meta[property="${property}"]`);
+      if (!meta) {
+        meta = document.createElement("meta");
+        meta.setAttribute("property", property);
+        document.head.appendChild(meta);
+      }
+      meta.content = content;
+    };
 
-      {/* Additional SEO Meta Tags */}
-      <meta name="robots" content="index, follow" />
-      <meta name="author" content={siteName} />
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
+    // Update basic meta tags
+    updateMetaTag("description", description);
+    updateMetaTag("keywords", keywords);
+    updateMetaTag("author", siteName);
+    updateMetaTag("robots", "index, follow");
+    updateMetaTag("language", "English");
+    updateMetaTag("revisit-after", "7 days");
+    updateMetaTag("industry", "Aviation");
+    updateMetaTag("business_type", "Aviation Services");
+    updateMetaTag(
+      "services",
+      "Pilot Training, Aircraft Operations, Maintenance Repair Overhaul, Airworthiness Management"
+    );
 
-      {/* Industry-specific meta tags */}
-      <meta name="industry" content="Aviation" />
-      <meta name="business_type" content="Aviation Services" />
-      <meta
-        name="services"
-        content="Pilot Training, Aircraft Operations, Maintenance Repair Overhaul, Airworthiness Management"
-      />
+    // Update canonical URL
+    let canonicalLink = document.querySelector('link[rel="canonical"]');
+    if (!canonicalLink) {
+      canonicalLink = document.createElement("link");
+      canonicalLink.rel = "canonical";
+      document.head.appendChild(canonicalLink);
+    }
+    canonicalLink.href = fullCanonical;
 
-      {/* Structured Data */}
-      <script type="application/ld+json">
-        {JSON.stringify(structuredData || defaultStructuredData)}
-      </script>
-    </Helmet>
-  );
+    // Update Open Graph tags
+    updatePropertyTag("og:title", fullTitle);
+    updatePropertyTag("og:description", description);
+    updatePropertyTag("og:type", ogType);
+    updatePropertyTag("og:url", fullCanonical);
+    updatePropertyTag("og:image", ogImage || defaultImage);
+    updatePropertyTag("og:site_name", siteName);
+    updatePropertyTag("og:locale", "en_US");
+
+    // Update Twitter Card tags
+    updatePropertyTag("twitter:card", "summary_large_image");
+    updatePropertyTag("twitter:title", fullTitle);
+    updatePropertyTag("twitter:description", description);
+    updatePropertyTag("twitter:image", ogImage || defaultImage);
+    updatePropertyTag("twitter:site", "@dunesgroup");
+
+    // Add structured data
+    const addStructuredData = (data) => {
+      const script = document.createElement("script");
+      script.type = "application/ld+json";
+      script.textContent = JSON.stringify(data);
+      document.head.appendChild(script);
+    };
+
+    // Remove existing structured data scripts
+    const existingScripts = document.querySelectorAll(
+      'script[type="application/ld+json"]'
+    );
+    existingScripts.forEach((script) => script.remove());
+
+    // Add new structured data
+    addStructuredData(structuredData || defaultStructuredData);
+
+    // Cleanup function
+    return () => {
+      // Remove meta tags we added (optional cleanup)
+      const metaTags = document.querySelectorAll(
+        'meta[name="description"], meta[name="keywords"], meta[property^="og:"], meta[property^="twitter:"]'
+      );
+      metaTags.forEach((tag) => {
+        if (
+          tag.content === description ||
+          tag.content === keywords ||
+          tag.content === fullTitle
+        ) {
+          tag.remove();
+        }
+      });
+    };
+  }, [
+    title,
+    description,
+    keywords,
+    canonical,
+    ogImage,
+    ogType,
+    structuredData,
+    fullTitle,
+    fullCanonical,
+    defaultImage,
+    siteName,
+  ]);
+
+  // This component doesn't render anything visible
+  return null;
 };
 
 export default SEO;
