@@ -12,7 +12,7 @@ const SEO = ({
 }) => {
   const siteName = "The Dunes Group";
   const siteUrl = "https://dunesgroup.in";
-  const defaultImage = `${siteUrl}/dunes-group-logo.png`;
+  const defaultImage = `${siteUrl}/og-image.png`;
 
   const fullTitle = title ? `${title} | ${siteName}` : siteName;
   const fullCanonical = canonical ? `${siteUrl}${canonical}` : siteUrl;
@@ -23,7 +23,7 @@ const SEO = ({
     "@type": "Organization",
     name: "The Dunes Group",
     url: siteUrl,
-    logo: `${siteUrl}/dunes-group-logo.png`,
+    logo: `${siteUrl}/og-image.png`,
     description:
       "The Dunes Group represents the unified strength of three core aviation verticals—Flying Training Organization (FTO), Non-Scheduled Air Operations (NSOP), and Maintenance, Repair & Overhaul (MRO) along with Continuing Airworthiness Management Organization (CAMO) services.",
     address: {
