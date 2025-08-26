@@ -6,31 +6,58 @@ const DEFAULT_RECIPIENT = "group@dunesaviation.in";
  * Send contact form email via backend API
  */
 export const sendContactEmail = async (formData) => {
-  const emailContent = generateEmailContent(formData);
-
   try {
+    // Validate required fields
+    if (!formData) {
+      throw new Error("Form data is required");
+    }
+
+    const emailContent = generateEmailContent(formData);
+
+    // Ensure we have essential data
+    if (!emailContent.subject || !emailContent.body) {
+      throw new Error("Invalid form data: missing subject or message");
+    }
+
+    const payload = {
+      subject: emailContent.subject,
+      body: emailContent.body,
+      from:
+        emailContent.from ||
+        `${formData.firstName || ""} ${formData.lastName || ""}`.trim() ||
+        "Website Contact",
+      email: formData.email || emailContent.email || "",
+      html: emailContent.html || "",
+    };
+
+    console.log("Sending email with payload:", {
+      subject: payload.subject,
+      from: payload.from,
+      email: payload.email,
+      hasHtml: !!payload.html,
+      bodyLength: payload.body.length,
+    });
+
     const response = await fetch(`${API_BASE_URL}/api/email/send`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        subject: emailContent.subject,
-        body: emailContent.body,
-        from: `${formData.firstName} ${formData.lastName}`.trim(),
-        email: formData.email,
-        html: emailContent.html,
-      }),
+      body: JSON.stringify(payload),
     });
 
     if (!response.ok) {
       const error = await response
         .json()
-        .catch(() => ({ message: "Network error" }));
+        .catch(() => ({
+          message: `HTTP ${response.status}: ${response.statusText}`,
+        }));
       throw new Error(error.message || `HTTP ${response.status}`);
     }
 
-    return response.json();
+    const result = await response.json();
+    console.log("Email sent successfully:", result);
+    return result;
   } catch (error) {
     console.error("Failed to send email:", error);
     throw error;
@@ -50,6 +77,7 @@ export const checkEmailHealth = async () => {
     }
     return false;
   } catch (error) {
+    console.error("Health check failed:", error);
     return false;
   }
 };
@@ -67,47 +95,57 @@ export const openEmailClient = (emailData) => {
 };
 
 /**
- * Generate HTML email template
+ * Generate HTML email template with proper error handling
  */
 const generateHTMLTemplate = (formData, serviceName, fullName) => {
-  const currentDate = new Date().toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  try {
+    const currentDate = new Date().toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
 
-  // Get urgency level based on service type
-  const getUrgencyInfo = (service) => {
-    const urgencyMap = {
-      training: {
-        level: "HIGH",
-        color: "#e53e3e",
-        text: "Training Inquiry - Immediate Response Required",
-      },
-      charter: {
-        level: "URGENT",
-        color: "#d69e2e",
-        text: "Charter Request - Time Sensitive",
-      },
-      maintenance: {
-        level: "MEDIUM",
-        color: "#3182ce",
-        text: "Maintenance Inquiry - Follow Up Soon",
-      },
-      other: {
-        level: "NORMAL",
-        color: "#38a169",
-        text: "General Inquiry - Standard Response",
-      },
+    // Safely get form data with defaults
+    const safeFormData = {
+      email: formData.email || "Not provided",
+      message: formData.message || "No message provided",
+      service: formData.service || "other",
+      firstName: formData.firstName || "",
+      lastName: formData.lastName || "",
     };
-    return urgencyMap[formData.service] || urgencyMap.other;
-  };
 
-  const urgencyInfo = getUrgencyInfo(formData.service);
+    // Get urgency level based on service type
+    const getUrgencyInfo = (service) => {
+      const urgencyMap = {
+        training: {
+          level: "HIGH",
+          color: "#e53e3e",
+          text: "Training Inquiry - Immediate Response Required",
+        },
+        charter: {
+          level: "URGENT",
+          color: "#d69e2e",
+          text: "Charter Request - Time Sensitive",
+        },
+        maintenance: {
+          level: "MEDIUM",
+          color: "#3182ce",
+          text: "Maintenance Inquiry - Follow Up Soon",
+        },
+        other: {
+          level: "NORMAL",
+          color: "#38a169",
+          text: "General Inquiry - Standard Response",
+        },
+      };
+      return urgencyMap[service] || urgencyMap.other;
+    };
 
-  return `
+    const urgencyInfo = getUrgencyInfo(safeFormData.service);
+
+    return `
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -156,10 +194,10 @@ const generateHTMLTemplate = (formData, serviceName, fullName) => {
             <div style="background-color: ${
               urgencyInfo.color
             }; background: linear-gradient(135deg, ${urgencyInfo.color} 0%, ${
-    urgencyInfo.color
-  }dd 100%); padding: 18px 25px; text-align: center; border-bottom: 3px solid ${
-    urgencyInfo.color
-  };">
+      urgencyInfo.color
+    }dd 100%); padding: 18px 25px; text-align: center; border-bottom: 3px solid ${
+      urgencyInfo.color
+    };">
                 <div style="display: inline-flex; align-items: center; background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 25px; backdrop-filter: blur(10px);">
                     <span style="background: #ffffff; color: ${
                       urgencyInfo.color
@@ -200,10 +238,10 @@ const generateHTMLTemplate = (formData, serviceName, fullName) => {
                                 <div>
                                     <strong style="color: #2d3748; font-size: 14px; display: block;">Email Address</strong>
                                     <a href="mailto:${
-                                      formData.email
+                                      safeFormData.email
                                     }" style="color: #1e3c72; font-size: 16px; font-weight: 600; text-decoration: none;">${
-    formData.email
-  }</a>
+      safeFormData.email
+    }</a>
                                 </div>
                             </div>
                             <div style="display: flex; align-items: center;">
@@ -228,7 +266,7 @@ const generateHTMLTemplate = (formData, serviceName, fullName) => {
                     
                     <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); padding: 25px; border-radius: 12px; border-left: 4px solid #667eea; position: relative;">
                         <p style="margin: 0; color: #2d3748; font-size: 16px; line-height: 1.8; white-space: pre-wrap; font-weight: 500;">${
-                          formData.message
+                          safeFormData.message
                         }</p>
                         <div style="position: absolute; top: 15px; right: 15px; color: #667eea; font-size: 24px; opacity: 0.3;">"</div>
                     </div>
@@ -244,7 +282,7 @@ const generateHTMLTemplate = (formData, serviceName, fullName) => {
                     
                     <div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-bottom: 20px;">
                         <a href="mailto:${
-                          formData.email
+                          safeFormData.email
                         }?subject=Re: ${serviceName} Inquiry - Dunes Aviation Response&body=Dear ${fullName},%0D%0A%0D%0AThank you for your interest in our ${serviceName}. We're excited to help you on your aviation journey.%0D%0A%0D%0ABest regards,%0D%0ADunes Aviation Team" 
                            style="display: inline-flex; align-items: center; background: #ffffff; color: #1e3c72; padding: 14px 28px; text-decoration: none; border-radius: 30px; font-weight: 700; margin: 5px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); transition: all 0.3s ease;">
                             <span style="margin-right: 10px; font-size: 18px;">✉️</span>
@@ -334,56 +372,136 @@ const generateHTMLTemplate = (formData, serviceName, fullName) => {
             <tr><td style="padding: 20px; background-color: #f0f4f8; font-family: Arial, sans-serif;">
                 <h2 style="color: #1e3c72;">New Customer Inquiry - Dunes Aviation</h2>
                 <p><strong>Customer:</strong> ${fullName}</p>
-                <p><strong>Email:</strong> ${formData.email}</p>
+                <p><strong>Email:</strong> ${safeFormData.email}</p>
                 <p><strong>Service:</strong> ${serviceName}</p>
-                <p><strong>Message:</strong> ${formData.message}</p>
-                <p><a href="mailto:${formData.email}">Reply to Customer</a></p>
+                <p><strong>Message:</strong> ${safeFormData.message}</p>
+                <p><a href="mailto:${
+                  safeFormData.email
+                }">Reply to Customer</a></p>
             </td></tr>
         </table>
         <![endif]-->
     </body>
     </html>
     `;
+  } catch (error) {
+    console.error("Error generating HTML template:", error);
+    // Return a simple fallback template
+    return `
+    <html>
+    <body style="font-family: Arial, sans-serif; padding: 20px;">
+        <h2>New Website Inquiry</h2>
+        <p><strong>From:</strong> ${fullName || "Unknown"}</p>
+        <p><strong>Email:</strong> ${formData.email || "Not provided"}</p>
+        <p><strong>Service:</strong> ${serviceName}</p>
+        <p><strong>Message:</strong></p>
+        <div style="background: #f5f5f5; padding: 15px; margin: 10px 0;">
+            ${formData.message || "No message provided"}
+        </div>
+    </body>
+    </html>
+    `;
+  }
 };
 
 /**
- * Generate email content from form data
+ * Generate email content from form data with proper error handling
  */
 export const generateEmailContent = (formData) => {
-  const serviceLabels = {
-    training: "Pilot Training",
-    charter: "Charter Services",
-    maintenance: "Maintenance & MRO",
-    other: "General Inquiry",
-  };
+  try {
+    // Validate and sanitize form data
+    if (!formData || typeof formData !== "object") {
+      throw new Error("Invalid form data provided");
+    }
 
-  const serviceName = serviceLabels[formData.service] || "General Inquiry";
-  const fullName = `${formData.firstName} ${formData.lastName}`.trim();
-  const subject = `${serviceName} Inquiry - ${fullName}`;
+    const serviceLabels = {
+      training: "Pilot Training",
+      charter: "Charter Services",
+      maintenance: "Maintenance & MRO",
+      other: "General Inquiry",
+    };
 
-  const html = generateHTMLTemplate(formData, serviceName, fullName);
+    // Safely extract form data with defaults
+    const safeFormData = {
+      firstName: formData.firstName || "",
+      lastName: formData.lastName || "",
+      email: formData.email || "",
+      service: formData.service || "other",
+      message: formData.message || "No message provided",
+    };
 
-  // Plain text fallback
-  const body = `
+    const serviceName =
+      serviceLabels[safeFormData.service] || "General Inquiry";
+    const fullName =
+      `${safeFormData.firstName} ${safeFormData.lastName}`.trim() ||
+      "Website Contact";
+    const subject = `${serviceName} Inquiry - ${fullName}`;
+
+    const html = generateHTMLTemplate(safeFormData, serviceName, fullName);
+
+    // Plain text fallback
+    const body = `
 New Inquiry from Dunes Aviation Website
 
 Name: ${fullName}
-Email: ${formData.email}
+Email: ${safeFormData.email}
 Service: ${serviceName}
 
 Message:
-${formData.message}
+${safeFormData.message}
 
 Sent via website contact form
 Date: ${new Date().toLocaleString()}
-  `.trim();
+    `.trim();
 
-  return {
-    subject,
-    body,
-    html,
-    email: formData.email,
-  };
+    return {
+      subject,
+      body,
+      html,
+      email: safeFormData.email,
+      from: fullName,
+    };
+  } catch (error) {
+    console.error("Error generating email content:", error);
+
+    // Return basic fallback content
+    return {
+      subject: "Website Contact Form Submission",
+      body: formData?.message || "No message provided",
+      email: formData?.email || "",
+      from: formData
+        ? `${formData.firstName || ""} ${formData.lastName || ""}`.trim() ||
+          "Website Contact"
+        : "Website Contact",
+      html: "",
+    };
+  }
 };
 
-// ...rest of the existing code...
+/**
+ * Validate form data before sending
+ */
+export const validateFormData = (formData) => {
+  const errors = [];
+
+  if (!formData) {
+    errors.push("Form data is required");
+    return { isValid: false, errors };
+  }
+
+  if (!formData.message || !formData.message.trim()) {
+    errors.push("Message is required");
+  }
+
+  if (formData.email && formData.email.trim()) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email.trim())) {
+      errors.push("Valid email address is required");
+    }
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors,
+  };
+};
