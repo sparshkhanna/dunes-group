@@ -6,17 +6,20 @@ const DEFAULT_RECIPIENT = "group@dunesaviation.in";
  * Send contact form email via backend API
  */
 export const sendContactEmail = async (formData) => {
+  const emailContent = generateEmailContent(formData);
+
   try {
-    const response = await fetch(`${API_BASE_URL}/api/contact`, {
+    const response = await fetch(`${API_BASE_URL}/api/email/send`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        subject: formData.subject || "New Contact Form Submission",
-        body: formData.message,
+        subject: emailContent.subject,
+        body: emailContent.body,
         from: `${formData.firstName} ${formData.lastName}`.trim(),
-        email: formData.email, // This will be used as reply-to
+        email: formData.email,
+        html: emailContent.html,
       }),
     });
 
@@ -382,3 +385,5 @@ Date: ${new Date().toLocaleString()}
     email: formData.email,
   };
 };
+
+// ...rest of the existing code...
