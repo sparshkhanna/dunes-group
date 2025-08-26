@@ -16,7 +16,8 @@ export const sendContactEmail = async (emailData) => {
     body: JSON.stringify({
       subject: emailData.subject,
       body: emailData.body,
-      html: emailData.html, // Added HTML support
+      html: emailData.html,
+      email: emailData.email, // Add email for reply-to header
     }),
   });
 
@@ -37,7 +38,6 @@ export const checkEmailHealth = async () => {
   try {
     const url = `${API_BASE_URL}/api/email/health`;
     const response = await fetch(url);
-
     if (response.ok) {
       const data = await response.json();
       return data.success;
@@ -353,27 +353,59 @@ export const generateEmailContent = (formData) => {
 
   const serviceName = serviceLabels[formData.service] || "General Inquiry";
   const fullName = `${formData.firstName} ${formData.lastName}`.trim();
-
   const subject = `${serviceName} Inquiry - ${fullName}`;
 
-  // Plain text version (fallback)
+  // Simple HTML template
+  const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+    </head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+      <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h2>New Inquiry - ${serviceName}</h2>
+        
+        <div style="background: #f5f5f5; padding: 20px; border-radius: 5px; margin: 20px 0;">
+          <p><strong>Name:</strong> ${fullName}</p>
+          <p><strong>Email:</strong> ${formData.email}</p>
+          <p><strong>Service:</strong> ${serviceName}</p>
+        </div>
+
+        <div style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
+          <h3>Message:</h3>
+          <p style="white-space: pre-wrap;">${formData.message}</p>
+        </div>
+
+        <hr style="margin: 20px 0;">
+        <p style="color: #666; font-size: 0.9em;">
+          Sent via Dunes Aviation website contact form<br>
+          Date: ${new Date().toLocaleString()}
+        </p>
+      </div>
+    </body>
+    </html>
+  `;
+
+  // Plain text fallback
   const body = `
-New contact form submission from Dunes Aviation website:
+New Inquiry from Dunes Aviation Website
 
 Name: ${fullName}
 Email: ${formData.email}
-Service Interest: ${serviceName}
+Service: ${serviceName}
 
 Message:
 ${formData.message}
 
----
-Submitted via Dunes Aviation website contact form
-Time: ${new Date().toLocaleString()}
-    `.trim();
+Sent via website contact form
+Date: ${new Date().toLocaleString()}
+  `.trim();
 
-  // HTML version (enhanced)
-  const html = generateHTMLTemplate(formData, serviceName, fullName);
-
-  return { subject, body, html };
+  return {
+    subject,
+    body,
+    html,
+    email: formData.email, // Add email for reply-to header
+  };
 };
