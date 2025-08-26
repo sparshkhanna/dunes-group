@@ -5,30 +5,36 @@ const DEFAULT_RECIPIENT = "group@dunesaviation.in";
 /**
  * Send contact form email via backend API
  */
-export const sendContactEmail = async (emailData) => {
-  const url = `${API_BASE_URL}/api/email/send`;
+export const sendContactEmail = async (formData) => {
+  const emailContent = generateEmailContent(formData);
 
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      subject: emailData.subject,
-      body: emailData.body,
-      html: emailData.html,
-      email: emailData.email, // Add email for reply-to header
-    }),
-  });
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/contact`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        subject: emailContent.subject,
+        body: emailContent.body,
+        from: `${formData.firstName} ${formData.lastName}`.trim(),
+        email: formData.email,
+        html: emailContent.html,
+      }),
+    });
 
-  if (!response.ok) {
-    const error = await response
-      .json()
-      .catch(() => ({ message: "Network error" }));
-    throw new Error(error.message || `HTTP ${response.status}`);
+    if (!response.ok) {
+      const error = await response
+        .json()
+        .catch(() => ({ message: "Network error" }));
+      throw new Error(error.message || `HTTP ${response.status}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Failed to send email:", error);
+    throw error;
   }
-
-  return response.json();
 };
 
 /**
@@ -341,7 +347,7 @@ const generateHTMLTemplate = (formData, serviceName, fullName) => {
 };
 
 /**
- * Generate email content from form data - Enhanced with HTML
+ * Generate email content from form data
  */
 export const generateEmailContent = (formData) => {
   const serviceLabels = {
@@ -355,37 +361,7 @@ export const generateEmailContent = (formData) => {
   const fullName = `${formData.firstName} ${formData.lastName}`.trim();
   const subject = `${serviceName} Inquiry - ${fullName}`;
 
-  // Simple HTML template
-  const html = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="UTF-8">
-    </head>
-    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-      <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
-        <h2>New Inquiry - ${serviceName}</h2>
-        
-        <div style="background: #f5f5f5; padding: 20px; border-radius: 5px; margin: 20px 0;">
-          <p><strong>Name:</strong> ${fullName}</p>
-          <p><strong>Email:</strong> ${formData.email}</p>
-          <p><strong>Service:</strong> ${serviceName}</p>
-        </div>
-
-        <div style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
-          <h3>Message:</h3>
-          <p style="white-space: pre-wrap;">${formData.message}</p>
-        </div>
-
-        <hr style="margin: 20px 0;">
-        <p style="color: #666; font-size: 0.9em;">
-          Sent via Dunes Aviation website contact form<br>
-          Date: ${new Date().toLocaleString()}
-        </p>
-      </div>
-    </body>
-    </html>
-  `;
+  const html = generateHTMLTemplate(formData, serviceName, fullName);
 
   // Plain text fallback
   const body = `
@@ -406,6 +382,6 @@ Date: ${new Date().toLocaleString()}
     subject,
     body,
     html,
-    email: formData.email, // Add email for reply-to header
+    email: formData.email,
   };
 };
