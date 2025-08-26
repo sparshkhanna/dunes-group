@@ -1,8 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { MapPin, Phone, Mail } from "lucide-react";
+import {
+  MapPin,
+  Phone,
+  Mail,
+  Send,
+  Loader2,
+  CheckCircle,
+  AlertCircle,
+  ExternalLink,
+} from "lucide-react";
 import AnimatedElement from "./AnimatedElement";
 import { Listbox } from "@headlessui/react";
 import { ChevronDown } from "lucide-react";
+import {
+  sendContactEmail,
+  checkEmailHealth,
+  openEmailClient,
+  generateEmailContent,
+} from "../utils/emailService";
 
 const serviceOptions = [
   { value: "", label: "Select Service" },
@@ -12,41 +27,86 @@ const serviceOptions = [
   { value: "other", label: "Other" },
 ];
 
-const ContactSection = ({ lightBg, selectedAircraft }) => {
+const ContactSection = ({ lightBg }) => {
   const [selectedService, setSelectedService] = useState(serviceOptions[0]);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     message: "",
-    aircraftInfo: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null); // 'success', 'error', null
+  const [errors, setErrors] = useState({});
+  const [emailServiceAvailable, setEmailServiceAvailable] = useState(true);
 
-  // Auto-fill form when aircraft is selected
+  // Check email service health on mount
   useEffect(() => {
-    if (selectedAircraft) {
-      const isTraining = selectedAircraft.type === "training";
-      const serviceType = isTraining ? "training" : "charter";
-      setSelectedService(
-        serviceOptions.find((option) => option.value === serviceType) ||
-          serviceOptions[0]
-      );
+    checkEmailHealth().then(setEmailServiceAvailable);
+  }, []);
 
-      setFormData((prev) => ({
-        ...prev,
-        aircraftInfo: `${selectedAircraft.name} - ${selectedAircraft.type}`,
-        message: isTraining
-          ? `I'm interested in pilot training using the ${selectedAircraft.name} (${selectedAircraft.type}).\n\nAircraft Details:\n- Capacity: ${selectedAircraft.capacity}\n- Range: ${selectedAircraft.range}\n\nPlease provide more information about training programs, schedules, and pricing for this aircraft.`
-          : `I'm interested in chartering the ${selectedAircraft.name} (${selectedAircraft.type}).\n\nAircraft Details:\n- Capacity: ${selectedAircraft.capacity}\n- Range: ${selectedAircraft.range}\n\nPlease provide more information about availability and pricing.`,
-      }));
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.firstName.trim())
+      newErrors.firstName = "First name is required";
+    if (!formData.email.trim()) newErrors.email = "Email is required";
+    else if (!/\S+@\S+\.\S+/.test(formData.email))
+      newErrors.email = "Invalid email format";
+    if (!selectedService.value) newErrors.service = "Please select a service";
+    if (!formData.message.trim()) newErrors.message = "Message is required";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) return;
+
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    try {
+      const emailContent = generateEmailContent({
+        ...formData,
+        service: selectedService.value,
+      });
+
+      await sendContactEmail(emailContent);
+
+      setSubmitStatus("success");
+
+      // Reset form
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        message: "",
+      });
+      setSelectedService(serviceOptions[0]);
+    } catch (error) {
+      console.error("Error sending email:", error);
+      setSubmitStatus("error");
+    } finally {
+      setIsSubmitting(false);
     }
-  }, [selectedAircraft]);
+  };
+
+  const handleFallbackContact = () => {
+    const emailContent = generateEmailContent({
+      ...formData,
+      service: selectedService.value,
+    });
+    openEmailClient(emailContent);
+  };
 
   const handleInputChange = (field, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: "" }));
+    }
   };
 
   return (
@@ -83,6 +143,7 @@ const ContactSection = ({ lightBg, selectedAircraft }) => {
         </AnimatedElement>
 
         <div className="grid md:grid-cols-2 gap-12">
+          {/* Contact Info */}
           <AnimatedElement animation="slideInLeft" className="space-y-8">
             {[
               {
@@ -98,14 +159,13 @@ const ContactSection = ({ lightBg, selectedAircraft }) => {
                   "Ahmedabad Airport | Bhavnagar Airport | Bhilwara Airstrip",
               },
               { icon: Phone, title: "Phone", content: "+91 96101 60999" },
-              { icon: Mail, title: "Email", content: "info@dunesaviation.in" },
+              { icon: Mail, title: "Email", content: "group@dunesaviation.in" },
             ].map((item, index) => (
               <div
                 key={index}
                 className={`flex items-start space-x-4 ${
                   lightBg ? "text-slate-900" : ""
                 }`}
-                style={{ animationDelay: `${index * 150}ms` }}
               >
                 <div
                   className={`w-12 h-12 rounded-full flex items-center justify-center animate-float ${
@@ -140,6 +200,7 @@ const ContactSection = ({ lightBg, selectedAircraft }) => {
             ))}
           </AnimatedElement>
 
+          {/* Contact Form */}
           <AnimatedElement animation="slideInRight" delay={200}>
             <div
               className={`rounded-2xl p-8 border ${
@@ -148,30 +209,54 @@ const ContactSection = ({ lightBg, selectedAircraft }) => {
                   : "bg-slate-800/50 backdrop-blur-sm border-slate-700"
               }`}
             >
-              {selectedAircraft && (
-                <div
-                  className={`mb-6 p-4 rounded-lg border-l-4 ${
-                    selectedAircraft.type === "training"
-                      ? "border-blue-500 bg-blue-500/10"
-                      : "border-[#D9AC40] bg-[#D9AC40]/20"
-                  } ${lightBg ? "text-slate-900" : "text-white"}`}
-                >
-                  <h4 className="font-semibold mb-2">
-                    {selectedAircraft.type === "training"
-                      ? "Selected Training Aircraft:"
-                      : "Selected Charter Aircraft:"}
-                  </h4>
-                  <p className="text-sm opacity-90">{selectedAircraft.name}</p>
-                  <p className="text-sm opacity-90">{selectedAircraft.type}</p>
-                  <p className="text-xs opacity-75 mt-1">
-                    {selectedAircraft.type === "training"
-                      ? "Perfect for pilot training programs"
-                      : "Ideal for charter services"}
-                  </p>
+              {/* Service Status Alert */}
+              {!emailServiceAvailable && (
+                <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg flex items-center space-x-2">
+                  <AlertCircle className="w-5 h-5 text-yellow-600" />
+                  <div className="text-yellow-700 text-sm">
+                    <p className="font-semibold">Email Service Notice</p>
+                    <p>
+                      Service temporarily unavailable. We'll open your email
+                      client instead.
+                    </p>
+                  </div>
                 </div>
               )}
 
-              <div className="space-y-6">
+              {/* Success Message */}
+              {submitStatus === "success" && (
+                <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center space-x-2">
+                  <CheckCircle className="w-5 h-5 text-green-600" />
+                  <span className="text-green-700">
+                    Message sent successfully! We'll get back to you soon.
+                  </span>
+                </div>
+              )}
+
+              {/* Error Message */}
+              {submitStatus === "error" && (
+                <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <AlertCircle className="w-5 h-5 text-red-600" />
+                    <span className="text-red-700 font-semibold">
+                      Message could not be sent
+                    </span>
+                  </div>
+                  <p className="text-red-600 text-sm mb-3">
+                    Please try the alternative method below.
+                  </p>
+                  <button
+                    onClick={handleFallbackContact}
+                    className="inline-flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                    <span>Open Email Client</span>
+                  </button>
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Name Fields */}
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <input
@@ -185,8 +270,13 @@ const ContactSection = ({ lightBg, selectedAircraft }) => {
                         lightBg
                           ? "bg-white border-slate-900/20 text-slate-900 placeholder-slate-900/40 focus:ring-[#D9AC40] hover:border-[#D9AC40]"
                           : "bg-slate-700/50 border border-slate-600 text-white placeholder-gray-400 focus:ring-[#D9AC40] hover:border-[#D9AC40]"
-                      }`}
+                      } ${errors.firstName ? "border-red-500" : ""}`}
                     />
+                    {errors.firstName && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.firstName}
+                      </p>
+                    )}
                   </div>
                   <div>
                     <input
@@ -205,6 +295,7 @@ const ContactSection = ({ lightBg, selectedAircraft }) => {
                   </div>
                 </div>
 
+                {/* Email */}
                 <div>
                   <input
                     type="email"
@@ -215,10 +306,14 @@ const ContactSection = ({ lightBg, selectedAircraft }) => {
                       lightBg
                         ? "bg-white border-slate-900/20 text-slate-900 placeholder-slate-900/40 focus:ring-[#D9AC40] hover:border-[#D9AC40]"
                         : "bg-slate-700/50 border border-slate-600 text-white placeholder-gray-400 focus:ring-[#D9AC40] hover:border-[#D9AC40]"
-                    }`}
+                    } ${errors.email ? "border-red-500" : ""}`}
                   />
+                  {errors.email && (
+                    <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                  )}
                 </div>
 
+                {/* Service Selection */}
                 <div className="relative">
                   <Listbox
                     value={selectedService}
@@ -227,16 +322,11 @@ const ContactSection = ({ lightBg, selectedAircraft }) => {
                     {({ open }) => (
                       <>
                         <Listbox.Button
-                          className={`w-full rounded-xl px-5 py-3 pr-12 text-base md:text-lg font-medium border transition-all duration-300 shadow focus:outline-none focus:ring-2 focus:ring-[#D9AC40] focus:border-[#D9AC40] hover:border-[#D9AC40] bg-opacity-90 flex items-center justify-between ${
+                          className={`w-full rounded-xl px-5 py-3 pr-12 text-base font-medium border transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#D9AC40] focus:border-[#D9AC40] hover:border-[#D9AC40] flex items-center justify-between ${
                             lightBg
-                              ? "bg-white border-slate-900/20 text-slate-900 placeholder-slate-900/40 hover:bg-[#f7f6f2]"
-                              : "bg-slate-700/60 border border-slate-600 text-white placeholder-gray-400 hover:bg-slate-700/80"
-                          }`}
-                          style={{
-                            boxShadow: lightBg
-                              ? "0 2px 12px 0 rgba(25,25,41,0.04)"
-                              : "0 2px 12px 0 rgba(0,0,0,0.12)",
-                          }}
+                              ? "bg-white border-slate-900/20 text-slate-900 hover:bg-[#f7f6f2]"
+                              : "bg-slate-700/60 border border-slate-600 text-white hover:bg-slate-700/80"
+                          } ${errors.service ? "border-red-500" : ""}`}
                         >
                           <span>{selectedService.label}</span>
                           <ChevronDown
@@ -248,8 +338,8 @@ const ContactSection = ({ lightBg, selectedAircraft }) => {
                           />
                         </Listbox.Button>
                         <Listbox.Options
-                          className={`absolute z-10 mt-2 w-full rounded-xl bg-white shadow-lg ring-1 ring-black/10 focus:outline-none text-base overflow-hidden ${
-                            lightBg ? "" : "bg-slate-800 text-white"
+                          className={`absolute z-10 mt-2 w-full rounded-xl shadow-lg ring-1 ring-black/10 focus:outline-none text-base overflow-hidden ${
+                            lightBg ? "bg-white" : "bg-slate-800 text-white"
                           }`}
                         >
                           {serviceOptions.map((option) => (
@@ -269,8 +359,14 @@ const ContactSection = ({ lightBg, selectedAircraft }) => {
                       </>
                     )}
                   </Listbox>
+                  {errors.service && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.service}
+                    </p>
+                  )}
                 </div>
 
+                {/* Message */}
                 <div>
                   <textarea
                     placeholder="Your Message"
@@ -283,20 +379,61 @@ const ContactSection = ({ lightBg, selectedAircraft }) => {
                       lightBg
                         ? "bg-white border-slate-900/20 text-slate-900 placeholder-slate-900/40 focus:ring-[#D9AC40] hover:border-[#D9AC40]"
                         : "bg-slate-700/50 border border-slate-600 text-white placeholder-gray-400 focus:ring-[#D9AC40] hover:border-[#D9AC40]"
-                    }`}
-                  ></textarea>
+                    } ${errors.message ? "border-red-500" : ""}`}
+                  />
+                  {errors.message && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.message}
+                    </p>
+                  )}
                 </div>
 
+                {/* Submit Button */}
                 <button
-                  className={`w-full px-6 py-3 rounded-lg font-semibold transition-all duration-500 transform hover:scale-105 animate-pulse hover:shadow-2xl hover:shadow-[#D9AC40]/25 ${
+                  type="submit"
+                  disabled={isSubmitting}
+                  className={`w-full px-6 py-3 rounded-lg font-semibold transition-all duration-500 transform hover:scale-105 hover:shadow-2xl hover:shadow-[#D9AC40]/25 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none ${
                     lightBg
                       ? "bg-slate-900 text-white hover:bg-[#D9AC40]"
                       : "bg-[#D9AC40] hover:bg-[#FFD700] text-white"
                   }`}
                 >
-                  Send Message
+                  {isSubmitting ? (
+                    <div className="flex items-center justify-center space-x-2">
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      <span>Sending...</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-center space-x-2">
+                      <Send className="w-5 h-5" />
+                      <span>Send Message</span>
+                    </div>
+                  )}
                 </button>
-              </div>
+
+                {/* Fallback Contact */}
+                <div className="text-center">
+                  <p
+                    className={`text-sm mb-3 ${
+                      lightBg ? "text-slate-600" : "text-gray-400"
+                    }`}
+                  >
+                    Having trouble? Contact us directly:
+                  </p>
+                  <button
+                    type="button"
+                    onClick={handleFallbackContact}
+                    className={`inline-flex items-center space-x-2 px-4 py-2 rounded-lg border transition-colors ${
+                      lightBg
+                        ? "border-slate-300 text-slate-700 hover:bg-slate-50"
+                        : "border-slate-600 text-gray-300 hover:bg-slate-700"
+                    }`}
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                    <span>Open Email Client</span>
+                  </button>
+                </div>
+              </form>
             </div>
           </AnimatedElement>
         </div>

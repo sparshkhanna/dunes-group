@@ -40,7 +40,7 @@ const SEO = ({
         "@type": "ContactPoint",
         contactType: "customer service",
         telephone: "+91 96101 60999",
-        email: "info@dunesaviation.in",
+        email: "group@dunesaviation.in",
         availableLanguage: "English",
       },
     ],

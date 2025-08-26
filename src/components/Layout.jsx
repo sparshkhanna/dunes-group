@@ -115,7 +115,7 @@ const Layout = ({ children }) => {
             <h4 className="text-white font-semibold mb-4">Contact</h4>
             <ul className="space-y-2 text-gray-400 text-sm">
               <li>+91 96101 60999</li>
-              <li>info@dunesaviation.in</li>
+              <li>group@dunesaviation.in</li>
               <li>703, The Umed Heights</li>
               <li>Jodhpur, Rajasthan, India</li>
             </ul>

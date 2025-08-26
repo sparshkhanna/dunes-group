@@ -7,7 +7,7 @@ const Footer = () => {
   };
 
   const handleEmailClick = () => {
-    window.open("mailto:info@dunesaviation.in", "_self");
+    window.open("mailto:group@dunesaviation.in", "_self");
   };
 
   const handleAddressClick = () => {
@@ -92,7 +92,7 @@ const Footer = () => {
                 onClick={handleEmailClick}
                 title="Click to send email"
               >
-                info@dunesaviation.in
+                group@dunesaviation.in
               </li>
               <li
                 className="hover:text-blue-400 transition-colors duration-300 cursor-pointer hover-scale"
