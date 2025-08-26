@@ -1,5 +1,5 @@
 // Frontend Email Service - Simplified for Contact Form
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 const DEFAULT_RECIPIENT = 'group@dunesaviation.in';
 
 /**
